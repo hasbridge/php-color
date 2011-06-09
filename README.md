@@ -3,6 +3,9 @@
 This class is intended to make it easier to convert between colorspaces,
 as well as compare one color to another.
 
+## Requirements
+- PHP 5.3 or greater (closure support is required)
+
 ## Examples:
 
 ### Initialize object (using hex notation is easier if you are familiar with CSS colors):
