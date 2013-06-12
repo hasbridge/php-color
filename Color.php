@@ -93,7 +93,7 @@ class Color
      */
     public function toHex()
     {
-        return dechex($this->color);
+        return str_pad(dechex($this->color),6,"0",STR_PAD_LEFT);
     }
     
     /**
