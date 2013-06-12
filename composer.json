@@ -1,0 +1,11 @@
+{
+    "name": "hasbridge/php-color",
+    "description": "Color utility class for PHP 5.3 that allows for easy conversion between RGB, HSV, XYZ, and Lab colorspaces, as well as color comparison",
+    "license": "MIT",
+    "autoload": {
+        "psr-0": {"Color": ""}
+    },
+    "require": {
+        "php": "~5.3"
+    }
+}
