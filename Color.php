@@ -372,7 +372,7 @@ class Color
     /**
      * Detect if color is grayscale
      * 
-     * @param int @threshold
+     * @param int $threshold
      * 
      * @return bool
      */
