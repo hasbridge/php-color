@@ -35,6 +35,7 @@ class HexTest extends PHPUnit_Framework_TestCase {
       $color->fromInt($i);
       $array_of_colours[$i]['hex'] = $color->toRgbString();
       $array_of_colours[$i]['HsvFloat'] = $color->toHsvFloat();
+      $array_of_colours[$i]['HsvInt'] = $color->toHsvInt();
       $array_of_colours[$i]['XYBri'] = $color->toXYBri();
     }
     return $array_of_colours;
@@ -58,10 +59,15 @@ class HexTest extends PHPUnit_Framework_TestCase {
     $this->assertGreaterThanOrEqual(0, $element['XYBri']['y']);
     $this->assertGreaterThanOrEqual(0, $element['XYBri']['bri']);
 
-    // Test HSV
+    // Test HSV Float
     $this->assertArrayHasKey("hue", $element['HsvFloat']);
     $this->assertArrayHasKey("sat", $element['HsvFloat']);
     $this->assertArrayHasKey("val", $element['HsvFloat']);
+
+    // Test HSV Int
+    $this->assertArrayHasKey("hue", $element['HsvInt']);
+    $this->assertArrayHasKey("sat", $element['HsvInt']);
+    $this->assertArrayHasKey("val", $element['HsvInt']);
 
   }
 
@@ -90,8 +96,86 @@ class HexTest extends PHPUnit_Framework_TestCase {
 
       // Assert that the delta between hex and xybri isn't too vast.
       $this->assertLessThanOrEqual(self::accuracy_loss_limit, $distance_rgb_between_hex_and_xybri, "Assure colour Accuracy loss is less than " . self::accuracy_loss_limit . ". {$int} => {$export['hex']} ... Distance = {$distance_rgb_between_hex_and_xybri} or {$distance_lab_between_hex_and_xybri} ({$color_from_hex->toRgbString()} vs {$color_from_xybri->toRgbString()})");
-
     }
+  }
+
+  public function testIsGrayscale(){
+    $colours = array("FFFFFF", "F0F0F0", "BBBBBB", "EFEFEF", "A8A8A8", "0F0F0F");
+    foreach($colours as $grayscale_colour){
+      $color = new Color();
+      $color->fromHex($grayscale_colour);
+      $this->assertTrue($color->isGrayscale());
+    }
+  }
+
+  public function testIsNotGrayscale(){
+    $colours = array("FF0000", "FFFF00", "0000FF");
+    foreach($colours as $not_grayscale_colour){
+      $color = new Color();
+      $color->fromHex($not_grayscale_colour);
+      $this->assertFalse($color->isGrayscale());
+    }
+  }
+
+  public function testGetClosestMatchWithColorObjects(){
+    $red = new Color();
+    $red->fromRgbString("FF0000");
+    $green = new Color();
+    $green->fromRgbString("00FF00");
+    $blue = new Color();
+    $blue->fromRgbString("0000FF");
+
+    $options = array($red, $green, $blue);
+
+    $color = new Color();
+    $color->fromRgbString("CCFEDD");
+
+    $closest_key = $color->getClosestMatch($options);
+
+    $closest = $options[$closest_key];
+
+    $this->assertEquals($green->toInt(), $closest->toInt(), "Closest should be green");
+  }
+
+  public function testGetClosestMatchWithIntegers(){
+    $red = 16711680;
+    $green = 65280;
+    $blue = 255;
+
+    $options = array($red, $green, $blue);
+
+    $color = new Color(14496682);
+
+    $closest_key = $color->getClosestMatch($options);
+
+    $closest = $options[$closest_key];
+
+    $this->assertEquals($red, $closest, "Closest should be red");
+  }
+
+  public function testToRgbHex(){
+    $color = new Color(14496682);
+    $rgb_hex = $color->toRgbHex();
+
+    $this->assertArrayHasKey("red", $rgb_hex);
+    $this->assertArrayHasKey("green", $rgb_hex);
+    $this->assertArrayHasKey("blue", $rgb_hex);
+
+    $this->assertEquals("dd", $rgb_hex['red']);
+    $this->assertEquals("33", $rgb_hex['green']);
+    $this->assertEquals("aa", $rgb_hex['blue']);
+  }
+
+  public function testFromRgbStringShort(){
+    $color = new Color();
+    $color->fromRgbString("123");
+    $this->assertEquals("#112233", $color->toRgbString());
+  }
+
+  public function testFromRgbHex(){
+    $color = new Color();
+    $color->fromRgbHex("ab", "cd", "ef");
+    $this->assertEquals("#ABCDEF", $color->toRgbString());
   }
 
 }
