@@ -35,7 +35,7 @@ class HexTest extends PHPUnit_Framework_TestCase {
     $step = round($max/pow(2,self::step_density));
     #$step = 1;
     $array_of_colours = array();
-    echo "Taking " . $max - $min . " colours in {$step} steps\n";
+    #echo "Taking " . ($max - $min) . " colours in {$step} steps\n";
     for($i = $min; $i <= $max; $i = $i + $step){
       $color = new Color();
       $color->fromInt($i);
