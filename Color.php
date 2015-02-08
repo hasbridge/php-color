@@ -399,9 +399,13 @@ class Color
         $cie_y = $rt * 0.234327 + $gt * 0.743075 + $bt * 0.022598;
         $cie_z = $rt * 0.0000000 + $gt * 0.053077 + $bt * 1.035763;
 
-        $hue_x = $cie_x / ($cie_x + $cie_y + $cie_z);
-        $hue_y = $cie_y / ($cie_x + $cie_y + $cie_z);
-
+        if($cie_x + $cie_y + $cie_z == 0){
+            $hue_x = 0.1;
+            $hue_y = 0.1;
+        }else {
+            $hue_x = $cie_x / ($cie_x + $cie_y + $cie_z);
+            $hue_y = $cie_y / ($cie_x + $cie_y + $cie_z);
+        }
         return array('x'=>$hue_x,'y'=>$hue_y,'bri'=>$cie_y);
     }
 
