@@ -1,5 +1,7 @@
 # PHP Color Utility Class
 
+![Travis CI](https://travis-ci.org/matthewbaggett/php-color.svg)
+
 This class is intended to make it easier to convert between colorspaces,
 as well as compare one color to another.
 
