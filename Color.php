@@ -186,7 +186,7 @@ class Color
         array_walk($hexes, function(&$hex, $key){
             $hex = str_pad($hex,2,"0",STR_PAD_LEFT);
         });
-        return "#" . implode('', $hexes);
+        return "#" . strtoupper(implode('', $hexes));
     }
     
     /**
