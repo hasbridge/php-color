@@ -182,11 +182,7 @@ class Color
      */
     public function toRgbString()
     {
-        $hexes = $this->toRgbHex();
-        array_walk($hexes, function(&$hex, $key){
-            $hex = str_pad($hex,2,"0",STR_PAD_LEFT);
-        });
-        return "#" . strtoupper(implode('', $hexes));
+        return $this->toString();
     }
     
     /**
