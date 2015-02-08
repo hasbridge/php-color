@@ -1,0 +1,7 @@
+<phpunit>
+    <testsuites>
+        <testsuite name="models">
+            <file>tests/HexTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
