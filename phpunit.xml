@@ -1,9 +1,9 @@
 <phpunit bootstrap="vendor/autoload.php"
          colors="true"
-         stopOnFailure="true">
+         stopOnFailure="false">
     <testsuites>
         <testsuite name="conversions">
-            <file>tests/HexTest.php</file>
+            <file>tests/GenerateTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
