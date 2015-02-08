@@ -71,6 +71,29 @@ class Color
     {
         return $this->fromRgbInt(hexdec($red), hexdec($green), hexdec($blue));
     }
+
+    /**
+     * Init color from a hex RGB string (#00FF00)
+     *
+     * @param $hex
+     * @return Color
+     */
+    public function fromRgbString($hex)
+    {
+        $hex = str_replace("#", "", $hex);
+
+        if(strlen($hex) == 3) {
+            $r = hexdec(substr($hex,0,1).substr($hex,0,1));
+            $g = hexdec(substr($hex,1,1).substr($hex,1,1));
+            $b = hexdec(substr($hex,2,1).substr($hex,2,1));
+        } else {
+            $r = hexdec(substr($hex,0,2));
+            $g = hexdec(substr($hex,2,2));
+            $b = hexdec(substr($hex,4,2));
+        }
+
+        return $this->fromRgbInt($r, $g, $b);
+    }
     
     /**
      * Init color from integer value
@@ -85,7 +108,37 @@ class Color
         
         return $this;
     }
-    
+
+    /**
+     * Init color from a CIE XYBri value
+     *
+     * @param $x
+     * @param $y
+     * @param $brightness
+     * @return Color
+     */
+    public function fromXYBri($x, $y, $brightness)
+    {
+        $_x = ($x * $brightness) / $y;
+        $_y = $brightness;
+        $_z = ((1 - $x - $y) * $brightness) / $y;
+
+        $r = $_x * 3.2406 + $_y * -1.5372 + $_z * -0.4986;
+        $g = $_x * -0.9689 + $_y * 1.8758 + $_z * 0.0415;
+        $b = $_x * 0.0557 + $_y * -0.2040 + $_z * 1.0570;
+
+        $r = $r > 0.0031308 ? 1.055 * pow($r, 1 / 2.4) - 0.055 : 12.92 * $r;
+        $g = $g > 0.0031308 ? 1.055 * pow($g, 1 / 2.4) - 0.055 : 12.92 * $g;
+        $b = $b > 0.0031308 ? 1.055 * pow($b, 1 / 2.4) - 0.055 : 12.92 * $b;
+
+        $r = $r > 0 ? round($r * 255) : 0;
+        $g = $g > 0 ? round($g * 255) : 0;
+        $b = $b > 0 ? round($b * 255) : 0;
+
+        return $this->fromRgbInt($r, $g, $b);
+    }
+
+
     /**
      * Convert color to hex
      * 
@@ -120,6 +173,20 @@ class Color
         return array_map(function($item){
             return dechex($item);
         }, $this->toRgbInt());
+    }
+
+    /**
+     * Convert color to an RGB Hex string (#00FF00)
+     *
+     * @return string
+     */
+    public function toRgbString()
+    {
+        $hexes = $this->toRgbHex();
+        array_walk($hexes, function(&$hex, $key){
+            $hex = str_pad($hex,2,"0",STR_PAD_LEFT);
+        });
+        return "#" . implode('', $hexes);
     }
     
     /**
@@ -292,7 +359,7 @@ class Color
         
         return $lab;
     }
-    
+
     /**
      * Convert color to integer
      * 
@@ -302,7 +369,43 @@ class Color
     {
         return $this->color;
     }
-    
+
+    /**
+     * Convert color to a CIE XYBri array.
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function toXYBri(){
+        $rgb = $this->toRgbInt();
+
+        $r = $rgb['red'];
+        $g = $rgb['green'];
+        $b = $rgb['blue'];
+
+        $r = $r / 255;
+        $g = $g / 255;
+        $b = $b / 255;
+
+        if ($r < 0 || $r > 1 || $g < 0 || $g > 1 || $b < 0 || $b > 1) {
+            throw new \Exception("Invalid RGB array. [{$r},{$b},{$g}]");
+        }
+
+        $rt = ($r > 0.04045) ? pow(($r + 0.055) / (1.0 + 0.055), 2.4) : ($r / 12.92);
+        $gt = ($g > 0.04045) ? pow(($g + 0.055) / (1.0 + 0.055), 2.4) : ($g / 12.92);
+        $bt = ($b > 0.04045) ? pow(($b + 0.055) / (1.0 + 0.055), 2.4) : ($b / 12.92);
+
+        $cie_x = $rt * 0.649926 + $gt * 0.103455 + $bt * 0.197109;
+        $cie_y = $rt * 0.234327 + $gt * 0.743075 + $bt * 0.022598;
+        $cie_z = $rt * 0.0000000 + $gt * 0.053077 + $bt * 1.035763;
+
+        $hue_x = $cie_x / ($cie_x + $cie_y + $cie_z);
+        $hue_y = $cie_y / ($cie_x + $cie_y + $cie_z);
+
+        return array('x'=>$hue_x,'y'=>$hue_y,'bri'=>$cie_y);
+    }
+
+
     /**
      * Alias of toString()
      * 
