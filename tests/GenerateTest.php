@@ -10,12 +10,6 @@ class HexTest extends PHPUnit_Framework_TestCase {
   const accuracy_loss_limit = 500;
   const step_density = 12;
 
-  private $color;
-
-  public function setUp(){
-    $this->color = new Color();
-  }
-
   public function testHexInput(){
     $color = new Color();
     $this->assertEquals('#000000', $color->fromInt(0)->toRgbString());
