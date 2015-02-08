@@ -4,9 +4,9 @@ language: php
 # list any PHP version you want to test against
 php:
   # aliased to a recent 5.3.x version
-    - 5.3
+  - 5.3
   # aliased to a recent 5.4.x version
-    - 5.4
+  - 5.4
   # aliased to a recent 5.5.x version
   - 5.5
   # aliased to a recent 5.6.x version
@@ -14,7 +14,7 @@ php:
 
 
 # execute any number of scripts before the test run, custom env's are available as variables
-before_script:
+#before_script:
 
 # omitting "script:" will default to phpunit
 # use the $DB env variable to determine the phpunit.xml to use
