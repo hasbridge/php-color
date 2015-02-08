@@ -436,9 +436,9 @@ class Color
     
     /**
      * Get the distance between this color and the given color
-     * 
-     * @param Color $color 
-     * 
+     *
+     * @param Color $color
+     *
      * @return int
      */
     public function getDistanceRgbFrom(Color $color)
@@ -457,9 +457,9 @@ class Color
     
     /**
      * Get distance from the given color using the Delta E method
-     * 
-     * @param Color $color 
-     * 
+     *
+     * @param Color $color
+     *
      * @return float
      */
     public function getDistanceLabFrom(Color $color)
@@ -508,9 +508,9 @@ class Color
         $matchKey = null;
         foreach($colors as $key => $color) {
             if (false === ($color instanceof Color)) {
-                $c = new Color($color);
+                $color = new Color($color);
             }
-            $dist = $this->getDistanceLabFrom($c);
+            $dist = $this->getDistanceLabFrom($color);
             if ($dist < $matchDist) {
                 $matchDist = $dist;
                 $matchKey = $key;
