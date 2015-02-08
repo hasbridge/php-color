@@ -1,6 +1,8 @@
-<phpunit>
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         stopOnFailure="true">
     <testsuites>
-        <testsuite name="models">
+        <testsuite name="conversions">
             <file>tests/HexTest.php</file>
         </testsuite>
     </testsuites>
