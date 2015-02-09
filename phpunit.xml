@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="vendor/autoload.php"
          colors="true"
          stopOnFailure="false">
@@ -6,4 +7,7 @@
             <file>tests/GenerateTest.php</file>
         </testsuite>
     </testsuites>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
 </phpunit>

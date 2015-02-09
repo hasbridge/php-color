@@ -1,28 +1,16 @@
-# see http://about.travis-ci.org/docs/user/languages/php/ for more hints
 language: php
 
-# list any PHP version you want to test against
-php:
-  # aliased to a recent 5.3.x version
-  - 5.3
-  # aliased to a recent 5.4.x version
-  - 5.4
-  # aliased to a recent 5.5.x version
-  - 5.5
-  # aliased to a recent 5.6.x version
-  - 5.6
+php: 5.3
 
-
-# execute any number of scripts before the test run, custom env's are available as variables
-before_script:
+before_script :
   - composer install
 
-# omitting "script:" will default to phpunit
-# use the $DB env variable to determine the phpunit.xml to use
-#script: phpunit --configuration phpunit_$DB.xml --coverage-text
+after_script:
+  - CODECLIMATE_REPO_TOKEN="34ea4cdfa1a1b0da0a5bf10664b2dccf295c5bde0932bf7dd4e4fd39d590d28d" vendor/bin/test-reporter --stdout > codeclimate.json
+  - "curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports"
+
 script: phpunit --configuration phpunit.xml --coverage-text
 
-# configure notifications (email, IRC, campfire etc)
 notifications:
   email:
     - matthew@baggett.me
