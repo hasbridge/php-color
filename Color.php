@@ -182,9 +182,13 @@ class Color
      */
     public function toRgbString()
     {
-        return $this->toString();
+        $hexes = $this->toRgbHex();
+        array_walk($hexes, function(&$hex, $key){
+            $hex = str_pad($hex,2,"0",STR_PAD_LEFT);
+        });
+        return "#" . strtoupper(implode('', $hexes));
     }
-    
+
     /**
      * Get Hue/Saturation/Value for the current color 
      * (float values, slow but accurate)
@@ -423,11 +427,7 @@ class Color
      */
     public function toString()
     {
-        $str = (string)$this->toHex();
-        if (strlen($str) < 6) {
-            $str = str_pad($str, 6, '0', STR_PAD_LEFT);
-        }
-        return strtoupper("#{$str}");
+        return $this->toRgbString();
     }
     
     /**
