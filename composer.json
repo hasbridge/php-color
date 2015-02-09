@@ -11,12 +11,12 @@
         "php": "~5.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "codeclimate/php-test-reporter": "dev-master"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1-dev",
-            "codeclimate/php-test-reporter": "dev-master"
+            "dev-master": "0.1-dev"
         }
     },
     "repositories": [
